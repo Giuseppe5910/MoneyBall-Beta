@@ -1,4 +1,4 @@
-batting <- read.csv('Training Exercises/Capstone and Data Viz Projects/Capstone Project/Batting.csv')
+batting <- read.csv('C:/Users/giuse/Documents/MoneyBall-Beta/Batting.csv')
 
 head(batting)
 str(batting)
@@ -23,7 +23,7 @@ batting$SLG <- ((1 * batting$X1B) + (2 * batting$X2B) + (3 * batting$X3B) + (4 *
 str(batting)
 
 #we load the salaries from salaries.csv
-sal<-read.csv('Training Exercises/Capstone and Data Viz Projects/Capstone Project/Salaries.csv')
+sal<-read.csv('C:/Users/giuse/Documents/MoneyBall-Beta/Salaries.csv')
 
 summary(sal)
 
@@ -46,10 +46,25 @@ combo<-subset(combo,yearID==2001)
 combo<-subset(combo,salary<8000000 & OBP>0 & AB>=450)
 str(combo)
 
+library(dplyr)
+avail.players <- filter(combo,yearID==2001)
 ggplot(combo,aes(x=OBP,y=salary))+geom_point()
-options<-head(arrange(combo,desc(OBP)),10)
-options[,c('playerID','AB','salary','OBP')]
 
+#we choose 8milion as a cut off point
+#get rid of the players OBP =0
+avail.players <- filter(avail.players,salary<8000000,OBP>0)
+
+#The total AB of the lost players is 1469. 
+#This is about 1500, meaning I should probably cut off my avail.players at 1500/3= 500 AB.
+avail.players <- filter(avail.players,AB >= 500)
+
+#SORTING
+possible <- head(arrange(avail.players,desc(OBP)),10)
+
+
+possible <- possible[,c('playerID','OBP','AB','salary')]
+
+possible
 
 
 
